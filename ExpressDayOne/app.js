@@ -10,7 +10,7 @@ app.use(helmet());          // 2. Secure your app with headers
 app.use(morgan('dev'));     // 3. Log HTTP requests
 
 
-// Custom middleware
+// Custom middleware //
 function logger(req, res, next) {
   console.log(`${req.method} ${req.url}`);
   next(); // move to next middleware/route
