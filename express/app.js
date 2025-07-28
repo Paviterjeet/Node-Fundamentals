@@ -2,13 +2,10 @@ import e from "express";
 
 const app = e();
 
-app.get(
-  "/",
-  (req, res, next) => {
+app.get("/",(req, res, next) => {
     res.write(" 1 ");
     next();
-  },
-  (req, res, next) => {
+  },(req, res, next) => {
     try {
         
       throw new Error(" Gilli gilli");
