@@ -1,0 +1,1 @@
+import counterSlice from 'store'
