@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect, useContext } from "react";
+import { TaskProvider, TaskContext } from "./context/TaskContext";
+import TaskInput from "./components/TaskInput";
+import TaskList from "./components/TaskList";
+import TaskStats from "./components/TaskStats";
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const [filter, setFilter] = useState("all");
+  const { dispatch } = useContext(TaskContext);
+
+  useEffect(() => {
+    const fakeFetch = async () => {
+      const initialTasks = [
+        { id: 1, text: "Learn hooks", done: false },
+        { id: 2, text: "Build app", done: true }
+      ];
+      await new Promise(r => setTimeout(r, 500));
+      dispatch({ type: "SET_TASKS", payload: initialTasks });
+    };
+    fakeFetch();
+  }, [dispatch]);
 
   return (
     <>
+      <h1>Task Manager</h1>
+      <TaskInput />
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        Filter:
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="all">All</option>
+          <option value="done">Completed</option>
+          <option value="todo">Pending</option>
+        </select>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <TaskList filter={filter} />
+      <TaskStats />
+    </>
+  );
+}
+export default function App() {
+  return (
+    <>
+    <TaskProvider>
+      <AppContent />
+    </TaskProvider>
     </>
   )
 }
-
-export default App
